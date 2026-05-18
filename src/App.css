@@ -1,4 +1,32 @@
-.body{
+#body{
+  display: grid;
+  grid-template-rows: 1fr 8fr 1fr;
+  grid-template-columns: 1fr 5fr;
+  height: 100vh;
+
+
+}
+.sidebar{
+  background-color: aqua;
+}
+.sidebar ul{
   display: flex;
-  
+  flex-direction: column;
+  padding:0px ;
+}
+.sidebar li{
+  list-style-type: none;
+  border-bottom: 0.5px solid gray;
+  padding: 4px;
+  text-align: center;
+  cursor: pointer;
+}
+.active{
+ background-color: aliceblue;
+}
+.show{
+  background-color: beige;
+}
+.sidebar li:hover{
+ background-color: aliceblue;
 }
