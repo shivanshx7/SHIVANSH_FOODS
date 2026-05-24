@@ -1,6 +1,6 @@
 #body{
   display: grid;
-  grid-template-rows: 1fr 8fr 1fr;
+  grid-template-rows: 2fr 20fr 1fr;
   grid-template-columns: 1fr 5fr;
   height: 100vh;
 
@@ -29,4 +29,18 @@
 }
 .sidebar li:hover{
  background-color: aliceblue;
+}
+.stockFlow{
+  display: grid;
+  grid-template-rows: 27px;
+  grid-template-columns: 3fr 1fr 1fr 1fr 1fr 1fr;
+  
+}
+.stockCat{
+  font-weight: bold;
+}
+.stockCat p{
+  margin: 0;
+  margin-top: 5px;
+  border-bottom: 1px solid black;
 }
