@@ -27,7 +27,7 @@ const Stock = () => {
         setStockItems(data || []);
       } catch (err) {
         console.error("Inventory Fetch Error:", err.message);
-        setStatusMessage(`❌ Error loading inventory: ${err.message}`);
+        setStatusMessage(`Error loading inventory: ${err.message}`);
       } finally {
         setLoading(false);
       }
@@ -84,7 +84,7 @@ const Stock = () => {
   if (loading) {
     return (
       <div style={{ padding: '40px 0', textAlign: 'center', color: 'var(--aqua-dark)' }}>
-        <p style={{ fontWeight: '500', fontSize: '16px' }}>🔄 Loading Live Inventory Stock Ledger...</p>
+        <p style={{ fontWeight: '500', fontSize: '16px' }}>Loading Live Inventory Stock Ledger...</p>
       </div>
     );
   }
@@ -95,7 +95,7 @@ const Stock = () => {
       {/* HEADER SECTION */}
       <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '15px' }}>
         <div>
-          <h2 className="heading-gradient-aqua">📦 Main Stock & Inventory Control</h2>
+          <h2 className="heading-gradient-aqua">Main Stock & Inventory Control</h2>
           <p>Real-time corporate ledger index & product inventory metrics</p>
         </div>
         <span style={{ fontSize: '14px', color: 'var(--text-muted)' }}>
@@ -146,10 +146,10 @@ const Stock = () => {
             onChange={(e) => setStatusFilter(e.target.value)}
             className="premium-select"
           >
-            <option value="all">📁 All Products ({totalItemsCount})</option>
-            <option value="inStock">✅ In Stock ({totalItemsCount - outOfStockCount})</option>
-            <option value="lowStock">⚠️ Low Stock Warning ({lowStockCount})</option>
-            <option value="outOfStock">❌ Out of Stock ({outOfStockCount})</option>
+            <option value="all">All Products ({totalItemsCount})</option>
+            <option value="inStock">In Stock ({totalItemsCount - outOfStockCount})</option>
+            <option value="lowStock">Low Stock Warning ({lowStockCount})</option>
+            <option value="outOfStock">Out of Stock ({outOfStockCount})</option>
           </select>
         </div>
 

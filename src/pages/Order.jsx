@@ -39,7 +39,7 @@ const Order = () => {
 
       } catch (err) {
         console.error("Order Load Error:", err.message);
-        setStatusMessage(`❌ Failed to load replenishment requirements: ${err.message}`);
+        setStatusMessage(`Failed to load replenishment requirements: ${err.message}`);
       } finally {
         setLoading(false);
       }
@@ -143,7 +143,7 @@ const Order = () => {
   if (loading) {
     return (
       <div style={{ padding: '40px 0', textAlign: 'center', color: 'var(--aqua-dark)' }}>
-        <p style={{ fontWeight: '500', fontSize: '16px' }}>🔄 Analyzing warehouse inventory metrics...</p>
+        <p style={{ fontWeight: '500', fontSize: '16px' }}>Analyzing warehouse inventory metrics...</p>
       </div>
     );
   }
@@ -154,7 +154,7 @@ const Order = () => {
       {/* HEADER BAR AND MASTER PDF BUTTON */}
       <div className="premium-card-red" style={{ borderLeft: '4px solid var(--red)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px', marginBottom: '30px' }}>
         <div>
-          <h2 className="heading-gradient-red" style={{ margin: '0 0 6px 0', fontSize: '24px' }}>🚨 Interactive Replenishment Board</h2>
+          <h2 className="heading-gradient-red" style={{ margin: '0 0 6px 0', fontSize: '24px' }}>Interactive Replenishment Board</h2>
           <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '14px' }}>
             Modify requested replenishment sizes inside each item card below, then export the master purchase order.
           </p>
@@ -171,13 +171,13 @@ const Order = () => {
             fontSize: '15px'
           }}
         >
-          📥 Export Purchase Order PDF
+          Export Purchase Order PDF
         </button>
       </div>
 
       {replenishList.length === 0 ? (
         <div className="premium-card" style={{ borderLeft: '4px solid var(--aqua)', padding: '30px', textAlign: 'center', color: 'var(--aqua-dark)', fontWeight: '600', fontSize: '16px' }}>
-          ✅ All items are healthy and securely stocked above safety buffer settings!
+          All items are healthy and securely stocked above safety buffer settings!
         </div>
       ) : (
         /* INTERACTIVE CARDS FLEX GRID LAYOUT */

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 
 const Dashboard = () => {
@@ -9,6 +9,7 @@ const Dashboard = () => {
     lowStockSKUs: 0,
     activeCustomersCount: 0
   });
+  const [outOfStockItems, setOutOfStockItems] = useState([]);
   const [metricsLoading, setMetricsLoading] = useState(true);
 
   // Safety stock threshold level
@@ -20,17 +21,21 @@ const Dashboard = () => {
       try {
         setMetricsLoading(true);
 
-        // 1. Pull Stock aggregates
+        // 1. Pull Stock aggregates and full item details
         const { data: stockData, error: stockErr } = await supabase
           .from('Stock')
-          .select('amount, qty');
+          .select('productName, amount, qty, rate, mrp');
         if (stockErr) throw stockErr;
 
         let stockVal = 0;
         let lowItems = 0;
+        const outOfStockList = [];
         stockData?.forEach(item => {
           stockVal += (item.amount || 0);
           if ((item.qty || 0) <= REPLENISH_THRESHOLD) lowItems++;
+          if ((item.qty || 0) === 0) {
+            outOfStockList.push(item);
+          }
         });
 
         // 2. Pull Customer balance aggregates
@@ -50,6 +55,7 @@ const Dashboard = () => {
           lowStockSKUs: lowItems,
           activeCustomersCount: customerData?.length || 0
         });
+        setOutOfStockItems(outOfStockList);
 
       } catch (err) {
         console.error("Dashboard Analytics Error:", err.message);
@@ -64,7 +70,7 @@ const Dashboard = () => {
   if (metricsLoading) {
     return (
       <div style={{ padding: '40px 0', textAlign: 'center', color: 'var(--aqua-dark)' }}>
-        <p style={{ fontWeight: '500', fontSize: '16px' }}>🔄 Syncing financial metrics and ledger indexes...</p>
+        <p style={{ fontWeight: '500', fontSize: '16px' }}>Syncing financial metrics and ledger indexes...</p>
       </div>
     );
   }
@@ -72,7 +78,7 @@ const Dashboard = () => {
   return (
     <div style={{ width: '100%' }}>
       <div className="page-header">
-        <h2 className="heading-gradient-red">📊 Live Enterprise Analytics Dashboard</h2>
+        <h2 className="heading-gradient-red">Live Enterprise Analytics Dashboard</h2>
         <p>Real-time corporate ledger index & product inventory metrics</p>
       </div>
       
@@ -105,14 +111,76 @@ const Dashboard = () => {
 
       </div>
 
-      {/* PARAMETERS SUMMARY PANEL */}
-      <div className="premium-card" style={{ borderLeft: '4px solid var(--aqua)' }}>
-        <h4 style={{ margin: '0 0 12px 0', color: 'var(--aqua-dark)', fontSize: '16px', fontWeight: '600' }}>🛡️ Operational System Parameters</h4>
-        <ul style={{ paddingLeft: '20px', fontSize: '14px', color: 'var(--text-muted)', lineHeight: '1.8', margin: 0 }}>
-          <li><strong>Inventory Buffer Warning limit:</strong> Set to flags ≤ {REPLENISH_THRESHOLD} units.</li>
-          <li><strong>Ledger Synchronization Status:</strong> Secure connection established with upstream Supabase instance.</li>
-          <li><strong>Data Refresh Integrity:</strong> Metric scores auto-aggregate cleanly on every initial card container layout mounting phase.</li>
-        </ul>
+      {/* SYSTEM OPERATIONS & CRITICAL STOCK REGISTRY */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '20px', marginBottom: '30px' }}>
+        
+        {/* OUT OF STOCK ALERTS CARD */}
+        <div className="premium-card-red" style={{ borderLeft: '4px solid var(--red)', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--red-dark)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            <h4 style={{ margin: 0, color: 'var(--red-dark)', fontSize: '16px', fontWeight: '600' }}>
+              Critical Out-of-Stock Alert Registry
+            </h4>
+          </div>
+          
+          {outOfStockItems.length === 0 ? (
+            <div style={{ padding: '24px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '14px', fontStyle: 'italic', background: 'var(--bg-accent)', borderRadius: '8px', border: '1px solid var(--border-light)' }}>
+              All inventory catalogs are currently stocked above zero levels.
+            </div>
+          ) : (
+            <div style={{ overflowX: 'auto', borderRadius: '8px', border: '1px solid var(--border-red-light)' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+                <thead>
+                  <tr style={{ background: 'var(--red-light)', borderBottom: '1.5px solid var(--border-red-light)' }}>
+                    <th style={{ padding: '10px 12px', textAlign: 'left', fontWeight: '600', color: 'var(--red-dark)' }}>Product Item Description</th>
+                    <th style={{ padding: '10px 12px', textAlign: 'right', fontWeight: '600', color: 'var(--red-dark)', width: '90px' }}>Rate</th>
+                    <th style={{ padding: '10px 12px', textAlign: 'right', fontWeight: '600', color: 'var(--red-dark)', width: '90px' }}>MRP</th>
+                    <th style={{ padding: '10px 12px', textAlign: 'center', fontWeight: '600', color: 'var(--red-dark)', width: '100px' }}>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {outOfStockItems.map((item, idx) => (
+                    <tr key={item.productName || idx} style={{ borderBottom: idx === outOfStockItems.length - 1 ? 'none' : '1px solid var(--border-red-light)', background: idx % 2 === 0 ? 'var(--bg-pure)' : 'rgba(229, 62, 62, 0.01)' }}>
+                      <td style={{ padding: '10px 12px', fontWeight: '500', color: 'var(--text-dark)' }}>{item.productName}</td>
+                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text-dark)', fontWeight: '600' }}>Rs. {item.rate}</td>
+                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text-muted)' }}>Rs. {item.mrp}</td>
+                      <td style={{ padding: '10px 12px', textAlign: 'center' }}>
+                        <span style={{ display: 'inline-block', padding: '3px 8px', borderRadius: '12px', fontSize: '11px', fontWeight: '600', background: 'var(--red-light)', color: 'var(--red-dark)', border: '1px solid var(--border-red-light)' }}>
+                          Depleted
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+
+        {/* PARAMETERS SUMMARY PANEL */}
+        <div className="premium-card" style={{ borderLeft: '4px solid var(--aqua)', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--aqua-dark)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="9" y1="9" x2="15" y2="9"></line>
+              <line x1="9" y1="13" x2="15" y2="13"></line>
+              <line x1="9" y1="17" x2="15" y2="17"></line>
+            </svg>
+            <h4 style={{ margin: 0, color: 'var(--aqua-dark)', fontSize: '16px', fontWeight: '600' }}>
+              Operational System Parameters
+            </h4>
+          </div>
+          <ul style={{ paddingLeft: '20px', fontSize: '14px', color: 'var(--text-muted)', lineHeight: '1.8', margin: 0, flex: 1 }}>
+            <li><strong>Inventory Buffer Warning limit:</strong> Set to flags ≤ {REPLENISH_THRESHOLD} units.</li>
+            <li><strong>Ledger Synchronization Status:</strong> Secure connection established with upstream Supabase instance.</li>
+            <li><strong>Data Refresh Integrity:</strong> Metric scores auto-aggregate cleanly on every initial card container layout mounting phase.</li>
+          </ul>
+        </div>
+
       </div>
 
     </div>

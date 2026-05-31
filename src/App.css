@@ -29,7 +29,7 @@
 }
 
 .sidebar-brand-name {
-  font-size: 24px;
+  font-size: 30px;
   font-weight: var(--fw-bold);
   color: var(--red);
   letter-spacing: -0.5px;
@@ -62,6 +62,7 @@
   font-size: 15px;
   font-weight: var(--fw-medium);
   color: var(--text-muted);
+  
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -74,9 +75,13 @@
 .sidebar li:hover {
   background-color: var(--aqua-light);
   color: var(--aqua-dark);
+
   transform: translateX(4px);
 }
-
+.jj{
+  color: rgb(1, 153, 204);
+  
+}
 .sidebar li.active {
   background-color: var(--red-light);
   color: var(--red-dark);

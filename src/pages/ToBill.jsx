@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 import { jsPDF } from 'jspdf';
-import autoTable from 'jspdf-autotable'; // 👈 Fixed broken trailing slash syntax error
+import autoTable from 'jspdf-autotable'; 
 
 const ToBill = () => {
   // Database States
@@ -51,7 +51,7 @@ const ToBill = () => {
 
       } catch (err) {
         console.error("Fetch Error: ", err.message);
-        setStatusMessage(`❌ Error fetching data: ${err.message}`);
+        setStatusMessage(`Error fetching data: ${err.message}`);
       } finally {
         setLoading(false);
       }
@@ -192,7 +192,7 @@ const ToBill = () => {
       
       setStatusMessage(`✨ Successfully added "${addedProduct.productName}" to inventory!`);
     } catch (err) {
-      setStatusMessage(`❌ Failed to create item: ${err.message}`);
+      setStatusMessage(` Failed to create item: ${err.message}`);
     } finally {
       setSubmitting(false);
     }
@@ -257,9 +257,9 @@ const ToBill = () => {
         c.customer === selectedCustomerId ? { ...c, balance: parsedBalance, status: computedStatus } : c
       ));
       setNewBalanceInput('');
-      setStatusMessage('✅ Balance manually adjusted successfully!');
+      setStatusMessage('Balance manually adjusted successfully!');
     } catch (err) {
-      setStatusMessage(`❌ Balance Update Failed: ${err.message}`);
+      setStatusMessage(`Balance Update Failed: ${err.message}`);
     } finally {
       setSubmitting(false);
     }
@@ -310,9 +310,9 @@ const ToBill = () => {
       ));
 
       setCart([]);
-      setStatusMessage('🎉 Invoice Closed! Stock reduced & Customer account updated.');
+      setStatusMessage('Invoice Closed! Stock reduced & Customer account updated.');
     } catch (err) {
-      setStatusMessage(`❌ Transaction processing halted: ${err.message}`);
+      setStatusMessage(`Transaction processing halted: ${err.message}`);
     } finally {
       setSubmitting(false);
     }
@@ -321,7 +321,7 @@ const ToBill = () => {
   if (loading) {
     return (
       <div style={{ padding: '40px 0', textAlign: 'center', color: 'var(--aqua-dark)' }}>
-        <p style={{ fontWeight: '500', fontSize: '16px' }}>🔄 Loading POS Billing Dashboard...</p>
+        <p style={{ fontWeight: '500', fontSize: '16px' }}>Loading POS Billing Dashboard...</p>
       </div>
     );
   }
@@ -329,7 +329,7 @@ const ToBill = () => {
   return (
     <div style={{ width: '100%' }}>
       <div className="page-header">
-        <h2 className="heading-gradient-aqua">🧾 POS Billing & Ledger System</h2>
+        <h2 className="heading-gradient-aqua">POS Billing & Ledger System</h2>
         <p>Draft invoices, manage customer balances, and export PDF billing statements</p>
       </div>
       
@@ -338,7 +338,7 @@ const ToBill = () => {
         {/* CARD 1: CUSTOMER DATA */}
         <div className="premium-card" style={{ borderLeft: '4px solid var(--aqua)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <div>
-            <h3 style={{ margin: '0 0 15px 0', fontSize: '18px', color: 'var(--aqua-dark)', fontWeight: '600' }}>👤 Customer Ledger Lookup</h3>
+            <h3 style={{ margin: '0 0 15px 0', fontSize: '18px', color: 'var(--aqua-dark)', fontWeight: '600' }}>Customer Ledger Lookup</h3>
             <label style={{ display: 'block', marginBottom: '6px', fontSize: '12px', fontWeight: '600', color: 'var(--text-muted)' }}>Select Client Account:</label>
             <select 
               value={selectedCustomerId} 
@@ -388,7 +388,7 @@ const ToBill = () => {
         {/* CARD 2: PULL FROM EXISTING STOCK */}
         <div className="premium-card" style={{ borderLeft: '4px solid var(--aqua)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <div>
-            <h3 style={{ margin: '0 0 15px 0', fontSize: '18px', color: 'var(--aqua-dark)', fontWeight: '600' }}>📦 Add Item to Invoice</h3>
+            <h3 style={{ margin: '0 0 15px 0', fontSize: '18px', color: 'var(--aqua-dark)', fontWeight: '600' }}>Add Item to Invoice</h3>
             <form onSubmit={handleAddToCart}>
               <label style={{ display: 'block', marginBottom: '6px', fontSize: '12px', fontWeight: '600', color: 'var(--text-muted)' }}>Product Profile:</label>
               <select 
@@ -429,7 +429,7 @@ const ToBill = () => {
         {/* CARD 3: ADD NEW PRODUCT TO STOCK */}
         <div className="premium-card-red" style={{ borderLeft: '4px solid var(--red)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <div>
-            <h3 style={{ margin: '0 0 15px 0', fontSize: '18px', color: 'var(--red)', fontWeight: '600' }}>✨ Add New Product to Stock</h3>
+            <h3 style={{ margin: '0 0 15px 0', fontSize: '18px', color: 'var(--red)', fontWeight: '600' }}>Add New Product to Stock</h3>
             <form onSubmit={handleAddNewProduct} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <div>
                 <input 
@@ -493,7 +493,7 @@ const ToBill = () => {
       {/* LIVE INVOICE PREVIEW SHEET */}
       <div className="premium-table-container" style={{ marginBottom: '20px' }}>
         <div style={{ background: 'var(--bg-accent)', padding: '14px 18px', borderBottom: '1px solid var(--border-light)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--text-dark)', fontWeight: '600' }}>📝 Live Billing Invoice</h3>
+          <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--text-dark)', fontWeight: '600' }}>Live Billing Invoice</h3>
         </div>
         <table className="premium-table">
           <thead>
@@ -559,7 +559,7 @@ const ToBill = () => {
                 cursor: cart.length === 0 ? 'not-allowed' : 'pointer'
               }}
             >
-              📥 Download PDF Bill
+              Download PDF Bill
             </button>
 
             <button 
