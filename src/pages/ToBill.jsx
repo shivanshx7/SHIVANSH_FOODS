@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable'; 
@@ -329,16 +329,15 @@ const ToBill = () => {
   return (
     <div style={{ width: '100%' }}>
       <div className="page-header">
-        <h2 className="heading-gradient-aqua">POS Billing & Ledger System</h2>
-        <p>Draft invoices, manage customer balances, and export PDF billing statements</p>
+        <h2 className="heading-gradient-aqua">POS Billing</h2>
       </div>
       
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px', marginBottom: '30px' }}>
         
         {/* CARD 1: CUSTOMER DATA */}
-        <div className="premium-card" style={{ borderLeft: '4px solid var(--aqua)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <div className="premium-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <div>
-            <h3 style={{ margin: '0 0 15px 0', fontSize: '18px', color: 'var(--aqua-dark)', fontWeight: '600' }}>Customer Ledger Lookup</h3>
+            <h3 style={{ margin: '0 0 15px 0', fontSize: '16px', color: 'var(--text-dark)', fontWeight: '700', fontFamily: 'Plus Jakarta Sans' }}>Customer Ledger </h3>
             <label style={{ display: 'block', marginBottom: '6px', fontSize: '12px', fontWeight: '600', color: 'var(--text-muted)' }}>Select Client Account:</label>
             <select 
               value={selectedCustomerId} 
@@ -352,18 +351,32 @@ const ToBill = () => {
                 </option>
               ))}
             </select>
-
+ 
             {currentCustomer && (
-              <div style={{ background: 'var(--bg-accent)', padding: '12px', borderRadius: '8px', borderLeft: '4px solid var(--aqua)', fontSize: '14px', lineHeight: '1.6' }}>
-                <p style={{ margin: '0 0 6px 0' }}><strong>Region/Place:</strong> {currentCustomer.place}</p>
-                <p style={{ margin: '0 0 6px 0' }}><strong>Outstanding Balance:</strong> <span style={{ color: currentCustomer.balance > 0 ? 'var(--red)' : 'var(--aqua-dark)', fontWeight: '700' }}>Rs. {currentCustomer.balance}</span></p>
-                <p style={{ margin: 0 }}><strong>Status:</strong> <span style={{ textTransform: 'uppercase', fontSize: '11px', fontWeight: '600', padding: '3px 8px', borderRadius: '12px', color: '#fff', background: currentCustomer.status === 'clear' ? 'var(--aqua)' : 'var(--red)' }}>{currentCustomer.status}</span></p>
+              <div style={{ background: 'var(--bg-accent)', padding: '14px', borderRadius: '8px', borderLeft: '3px solid var(--aqua)', fontSize: '13px', lineHeight: '1.6' }}>
+                <p style={{ margin: '0 0 6px 0', color: 'var(--text-muted)' }}><strong>Region/Place:</strong> <span style={{ color: 'var(--text-dark)', fontWeight: '500' }}>{currentCustomer.place}</span></p>
+                <p style={{ margin: '0 0 8px 0', color: 'var(--text-muted)' }}><strong>Outstanding Balance:</strong> <span style={{ color: currentCustomer.balance > 0 ? 'var(--red)' : 'var(--text-dark)', fontWeight: '700' }}>Rs. {currentCustomer.balance}</span></p>
+                <p style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-muted)' }}>
+                  <strong>Status:</strong>
+                  <span style={{ 
+                    textTransform: 'uppercase', 
+                    fontSize: '10px', 
+                    fontWeight: '700', 
+                    padding: '3px 8px', 
+                    borderRadius: '12px', 
+                    color: currentCustomer.status === 'clear' ? '#059669' : '#e11d48',
+                    background: currentCustomer.status === 'clear' ? '#ecfdf5' : '#fff1f2',
+                    border: `1px solid ${currentCustomer.status === 'clear' ? '#a7f3d0' : '#fda4af'}`
+                  }}>
+                    {currentCustomer.status}
+                  </span>
+                </p>
               </div>
             )}
           </div>
-
+ 
           <div style={{ marginTop: '20px', paddingTop: '15px', borderTop: '1px dashed var(--border-light)' }}>
-            <h4 style={{ margin: '0 0 10px 0', fontSize: '14px', color: 'var(--text-dark)', fontWeight: '600' }}>Override Balance Manually</h4>
+            <h4 style={{ margin: '0 0 10px 0', fontSize: '13px', color: 'var(--text-dark)', fontWeight: '600' }}>Override Balance Manually</h4>
             <div style={{ display: 'flex', gap: '8px' }}>
               <input 
                 type="number" 
@@ -384,11 +397,11 @@ const ToBill = () => {
             </div>
           </div>
         </div>
-
+ 
         {/* CARD 2: PULL FROM EXISTING STOCK */}
-        <div className="premium-card" style={{ borderLeft: '4px solid var(--aqua)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <div className="premium-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <div>
-            <h3 style={{ margin: '0 0 15px 0', fontSize: '18px', color: 'var(--aqua-dark)', fontWeight: '600' }}>Add Item to Invoice</h3>
+            <h3 style={{ margin: '0 0 15px 0', fontSize: '16px', color: 'var(--text-dark)', fontWeight: '700', fontFamily: 'Plus Jakarta Sans' }}>Add Item to Invoice</h3>
             <form onSubmit={handleAddToCart}>
               <label style={{ display: 'block', marginBottom: '6px', fontSize: '12px', fontWeight: '600', color: 'var(--text-muted)' }}>Product Profile:</label>
               <select 
@@ -403,7 +416,7 @@ const ToBill = () => {
                   </option>
                 ))}
               </select>
-
+ 
               <div style={{ marginBottom: '15px' }}>
                 <label style={{ display: 'block', marginBottom: '6px', fontSize: '12px', fontWeight: '600', color: 'var(--text-muted)' }}>Quantity Selection:</label>
                 <input 
@@ -425,11 +438,11 @@ const ToBill = () => {
             </form>
           </div>
         </div>
-
+ 
         {/* CARD 3: ADD NEW PRODUCT TO STOCK */}
-        <div className="premium-card-red" style={{ borderLeft: '4px solid var(--red)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <div className="premium-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <div>
-            <h3 style={{ margin: '0 0 15px 0', fontSize: '18px', color: 'var(--red)', fontWeight: '600' }}>Add New Product to Stock</h3>
+            <h3 style={{ margin: '0 0 15px 0', fontSize: '16px', color: 'var(--text-dark)', fontWeight: '700', fontFamily: 'Plus Jakarta Sans' }}>Register New Catalog</h3>
             <form onSubmit={handleAddNewProduct} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <div>
                 <input 
@@ -437,7 +450,7 @@ const ToBill = () => {
                   placeholder="Product Name" 
                   value={newProdName}
                   onChange={(e) => setNewProdName(e.target.value)}
-                  className="premium-input-red"
+                  className="premium-input"
                 />
               </div>
               <div style={{ display: 'flex', gap: '8px' }}>
@@ -446,7 +459,7 @@ const ToBill = () => {
                   placeholder="MRP" 
                   value={newProdMrp}
                   onChange={(e) => setNewProdMrp(e.target.value)}
-                  className="premium-input-red"
+                  className="premium-input"
                   style={{ flex: 1 }}
                 />
                 <input 
@@ -454,7 +467,7 @@ const ToBill = () => {
                   placeholder="Rate" 
                   value={newProdRate}
                   onChange={(e) => setNewProdRate(e.target.value)}
-                  className="premium-input-red"
+                  className="premium-input"
                   style={{ flex: 1 }}
                 />
               </div>
@@ -464,7 +477,7 @@ const ToBill = () => {
                   placeholder="Initial Qty" 
                   value={newProdQty}
                   onChange={(e) => setNewProdQty(e.target.value)}
-                  className="premium-input-red"
+                  className="premium-input"
                   style={{ flex: 1 }}
                 />
                 <input 
@@ -472,7 +485,7 @@ const ToBill = () => {
                   placeholder="Disc %" 
                   value={newProdDisc}
                   onChange={(e) => setNewProdDisc(e.target.value)}
-                  className="premium-input-red"
+                  className="premium-input"
                   style={{ flex: 1 }}
                 />
               </div>
@@ -487,7 +500,7 @@ const ToBill = () => {
             </form>
           </div>
         </div>
-
+ 
       </div>
 
       {/* LIVE INVOICE PREVIEW SHEET */}
@@ -533,12 +546,11 @@ const ToBill = () => {
             )}
           </tbody>
         </table>
-
         {/* SUMMARY ACTION TOOLBAR BLOCK */}
-        <div style={{ padding: '20px 24px', background: 'var(--bg-accent)', display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'space-between', alignItems: 'center', borderTop: '1.5px solid var(--border-light)' }}>
+        <div style={{ padding: '20px 24px', background: 'var(--bg-pure)', display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--border-light)' }}>
           <div>
-            <h4 style={{ margin: '0 0 6px 0', fontSize: '18px', color: 'var(--text-dark)', fontWeight: '700' }}>
-              Grand Total Amount: <span style={{ color: 'var(--red)', fontSize: '22px' }}>Rs. {grandTotal}</span>
+            <h4 style={{ margin: '0 0 6px 0', fontSize: '15px', color: 'var(--text-muted)', fontWeight: '600' }}>
+              Grand Total Amount: <span style={{ color: 'var(--text-dark)', fontSize: '24px', fontWeight: '800', fontFamily: 'Plus Jakarta Sans', marginLeft: '8px' }}>Rs. {grandTotal}</span>
             </h4>
             {currentCustomer && (
               <span style={{ fontSize: '13px', color: 'var(--text-muted)', fontWeight: '500' }}>
@@ -561,7 +573,7 @@ const ToBill = () => {
             >
               Download PDF Bill
             </button>
-
+ 
             <button 
               onClick={handleCheckoutBill} 
               disabled={submitting || cart.length === 0} 
@@ -573,7 +585,7 @@ const ToBill = () => {
                 cursor: cart.length === 0 || submitting ? 'not-allowed' : 'pointer'
               }}
             >
-              {submitting ? 'Updating Database...' : 'Submit Bill & Update Accounts'}
+              {submitting ? 'Updating Database...' : 'Submit Bill'}
             </button>
           </div>
         </div>

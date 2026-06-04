@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 
 const Stock = () => {
@@ -95,31 +95,31 @@ const Stock = () => {
       {/* HEADER SECTION */}
       <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '15px' }}>
         <div>
-          <h2 className="heading-gradient-aqua">Main Stock & Inventory Control</h2>
+          <h2 className="heading-gradient-aqua">Stock Ledger</h2>
           <p>Real-time corporate ledger index & product inventory metrics</p>
         </div>
-        <span style={{ fontSize: '14px', color: 'var(--text-muted)' }}>
-          Threshold Level Warning set at: <strong style={{ color: 'var(--red)' }}>≤ {LOW_STOCK_THRESHOLD} units</strong>
+        <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
+          Safety Threshold Level: <strong style={{ color: 'var(--red)' }}>≤ {LOW_STOCK_THRESHOLD} units</strong>
         </span>
       </div>
 
       {/* 📊 SUMMARY ANALYTICS WIDGETS COCKPIT */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px', marginBottom: '30px' }}>
-        <div className="premium-card" style={{ borderLeft: '4px solid var(--aqua)' }}>
-          <span style={{ color: 'var(--aqua-dark)', fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Total SKUs Matrix</span>
-          <h3 style={{ margin: '8px 0 0 0', fontSize: '26px', color: 'var(--text-dark)', fontWeight: '700' }}>{totalItemsCount} Products</h3>
+        <div className="premium-card">
+          <span style={{ color: 'var(--text-muted)', fontSize: '11px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total SKUs Matrix</span>
+          <h3 style={{ margin: '8px 0 0 0', fontSize: '24px', color: 'var(--text-dark)', fontWeight: '800', fontFamily: 'Plus Jakarta Sans', letterSpacing: '-0.02em' }}>{totalItemsCount} Products</h3>
         </div>
-        <div className="premium-card-red" style={{ borderLeft: '4px solid var(--red)' }}>
-          <span style={{ color: 'var(--red)', fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Low Stock Warnings</span>
-          <h3 style={{ margin: '8px 0 0 0', fontSize: '26px', color: 'var(--red-dark)', fontWeight: '700' }}>{lowStockCount} Items</h3>
+        <div className="premium-card">
+          <span style={{ color: 'var(--text-muted)', fontSize: '11px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Low Stock Warnings</span>
+          <h3 style={{ margin: '8px 0 0 0', fontSize: '24px', color: lowStockCount > 0 ? 'var(--red)' : 'var(--text-dark)', fontWeight: '800', fontFamily: 'Plus Jakarta Sans', letterSpacing: '-0.02em' }}>{lowStockCount} Items</h3>
         </div>
-        <div className="premium-card-red" style={{ borderLeft: '4px solid var(--red)' }}>
-          <span style={{ color: 'var(--red)', fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Out of Stock Outages</span>
-          <h3 style={{ margin: '8px 0 0 0', fontSize: '26px', color: 'var(--red-dark)', fontWeight: '700' }}>{outOfStockCount} Items</h3>
+        <div className="premium-card">
+          <span style={{ color: 'var(--text-muted)', fontSize: '11px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Out of Stock Outages</span>
+          <h3 style={{ margin: '8px 0 0 0', fontSize: '24px', color: outOfStockCount > 0 ? 'var(--red)' : 'var(--text-dark)', fontWeight: '800', fontFamily: 'Plus Jakarta Sans', letterSpacing: '-0.02em' }}>{outOfStockCount} Items</h3>
         </div>
-        <div className="premium-card" style={{ borderLeft: '4px solid var(--aqua)' }}>
-          <span style={{ color: 'var(--aqua-dark)', fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Total Asset Valuation</span>
-          <h3 style={{ margin: '8px 0 0 0', fontSize: '26px', color: 'var(--aqua-dark)', fontWeight: '700' }}>Rs. {totalInventoryValuation.toLocaleString()}</h3>
+        <div className="premium-card">
+          <span style={{ color: 'var(--text-muted)', fontSize: '11px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total Asset Valuation</span>
+          <h3 style={{ margin: '8px 0 0 0', fontSize: '24px', color: 'var(--text-dark)', fontWeight: '800', fontFamily: 'Plus Jakarta Sans', letterSpacing: '-0.02em' }}>Rs. {totalInventoryValuation.toLocaleString()}</h3>
         </div>
       </div>
 
@@ -211,11 +211,11 @@ const Stock = () => {
                 if ((item.qty || 0) === 0) {
                   qtyBadgeBg = 'var(--red-light)';
                   qtyBadgeTextColor = 'var(--red-dark)';
-                  rowBgColor = 'rgba(229, 62, 62, 0.03)'; // soft red highlight tint
+                  rowBgColor = 'rgba(225, 29, 72, 0.02)'; // soft rose highlight tint
                 } else if ((item.qty || 0) <= LOW_STOCK_THRESHOLD) {
-                  qtyBadgeBg = 'var(--red-light)';
-                  qtyBadgeTextColor = 'var(--red-dark)';
-                  rowBgColor = 'rgba(0, 188, 212, 0.02)'; // soft aqua highlight tint
+                  qtyBadgeBg = 'var(--aqua-light)';
+                  qtyBadgeTextColor = 'var(--aqua-dark)';
+                  rowBgColor = 'rgba(79, 70, 229, 0.02)'; // soft indigo highlight tint
                 }
 
                 return (

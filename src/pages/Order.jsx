@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -152,12 +152,9 @@ const Order = () => {
     <div style={{ width: '100%' }}>
       
       {/* HEADER BAR AND MASTER PDF BUTTON */}
-      <div className="premium-card-red" style={{ borderLeft: '4px solid var(--red)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px', marginBottom: '30px' }}>
+      <div className="premium-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px', marginBottom: '30px' }}>
         <div>
-          <h2 className="heading-gradient-red" style={{ margin: '0 0 6px 0', fontSize: '24px' }}>Interactive Replenishment Board</h2>
-          <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '14px' }}>
-            Modify requested replenishment sizes inside each item card below, then export the master purchase order.
-          </p>
+          <h2 className="heading-gradient-red" style={{ margin: '0 0 6px 0', fontSize: '22px', fontFamily: 'Plus Jakarta Sans', fontWeight: '800' }}>Replenishment Dashboard</h2>
         </div>
         
         <button 
@@ -168,10 +165,10 @@ const Order = () => {
             opacity: replenishList.length === 0 ? 0.5 : 1,
             cursor: replenishList.length === 0 ? 'not-allowed' : 'pointer',
             padding: '12px 24px',
-            fontSize: '15px'
+            fontSize: '14px'
           }}
         >
-          Export Purchase Order PDF
+          Export Purchase Order
         </button>
       </div>
 
@@ -185,15 +182,12 @@ const Order = () => {
           {replenishList.map((item) => {
             const isOutOfStock = (item.qty || 0) === 0;
             const currentOrderQty = reorderQuantities[item.productName] || 0;
-            const CardClass = isOutOfStock ? 'premium-card-red' : 'premium-card';
-            const accentColor = isOutOfStock ? 'var(--red)' : 'var(--aqua)';
 
             return (
               <div 
                 key={item.productName}
-                className={CardClass}
+                className="premium-card"
                 style={{
-                  borderLeft: `4px solid ${accentColor}`,
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
@@ -207,48 +201,48 @@ const Order = () => {
                     <span style={{
                       padding: '3px 10px',
                       borderRadius: '12px',
-                      fontSize: '11px',
-                      fontWeight: '600',
-                      color: '#fff',
-                      background: isOutOfStock ? 'var(--red)' : 'var(--aqua)',
+                      fontSize: '10px',
+                      fontWeight: '700',
+                      color: isOutOfStock ? '#e11d48' : '#4f46e5',
+                      background: isOutOfStock ? '#fff1f2' : '#f0f2ff',
+                      border: `1px solid ${isOutOfStock ? '#fda4af' : '#c7d2fe'}`,
                       textTransform: 'uppercase',
-                      letterSpacing: '0.5px'
+                      letterSpacing: '0.05em'
                     }}>
-                      {isOutOfStock ? 'Out of Stock' : 'Low Stock Warning'}
+                      {isOutOfStock ? 'Depleted' : 'Low Stock'}
                     </span>
                     <span style={{ fontSize: '13px', color: 'var(--text-muted)', fontWeight: '600' }}>
                       Rate: Rs. {item.rate}
                     </span>
                   </div>
 
-                  <h4 style={{ margin: '0 0 12px 0', fontSize: '16px', color: 'var(--text-dark)', fontWeight: '600', lineHeight: '1.4' }}>
+                  <h4 style={{ margin: '0 0 12px 0', fontSize: '15px', color: 'var(--text-dark)', fontWeight: '700', fontFamily: 'Plus Jakarta Sans', lineHeight: '1.4' }}>
                     {item.productName}
                   </h4>
 
-                  <div style={{ background: 'var(--bg-accent)', padding: '10px 12px', borderRadius: '6px', fontSize: '13px', color: 'var(--text-muted)' }}>
-                    Current Warehouse Inventory: <strong style={{ color: isOutOfStock ? 'var(--red-dark)' : 'var(--aqua-dark)' }}>{item.qty || 0} units</strong>
+                  <div style={{ background: 'var(--bg-accent)', padding: '10px 12px', borderRadius: '8px', fontSize: '13px', color: 'var(--text-muted)', border: '1px solid var(--border-light)' }}>
+                    Warehouse stock: <strong style={{ color: isOutOfStock ? 'var(--red)' : 'var(--text-dark)' }}>{item.qty || 0} units</strong>
                   </div>
                 </div>
 
                 {/* Card Lower Interactive Input Block */}
                 <div style={{ padding: '15px 20px', background: 'var(--bg-accent)', borderTop: '1px solid var(--border-light)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px' }}>
                   <label style={{ fontSize: '13px', fontWeight: '600', color: 'var(--text-dark)', whiteSpace: 'nowrap' }}>
-                    Reorder Quantity:
+                    Reorder Units:
                   </label>
                   <input 
                     type="number"
                     min="0"
                     value={currentOrderQty}
                     onChange={(e) => handleQuantityChange(item.productName, e.target.value)}
-                    className={isOutOfStock ? 'premium-input-red' : 'premium-input'}
+                    className="premium-input"
                     style={{
-                      width: '90px',
+                      width: '80px',
                       padding: '6px',
                       textAlign: 'center',
                       fontWeight: '700',
                       fontSize: '14px',
-                      outline: 'none',
-                      background: '#fff'
+                      background: '#ffffff'
                     }}
                   />
                 </div>

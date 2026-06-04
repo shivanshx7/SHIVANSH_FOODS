@@ -78,35 +78,35 @@ const Dashboard = () => {
   return (
     <div style={{ width: '100%' }}>
       <div className="page-header">
-        <h2 className="heading-gradient-red">Live Enterprise Analytics Dashboard</h2>
+        <h2 className="heading-gradient-red">Operations Overview</h2>
         <p>Real-time corporate ledger index & product inventory metrics</p>
       </div>
       
       {/* TOP KPI SCORECARD RIBBON */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: '20px', marginBottom: '30px' }}>
         
-        <div className="premium-card" style={{ borderLeft: '4px solid var(--aqua)' }}>
-          <span style={kpiLabelStyle('var(--aqua-dark)')}>Asset Value (Stock)</span>
-          <h2 style={kpiValueStyle('var(--aqua-dark)')}>Rs. {metrics.totalStockValuation.toLocaleString()}</h2>
-          <small style={{ color: 'var(--text-muted)' }}>Total asset valuation of current inventory</small>
+        <div className="premium-card">
+          <span style={kpiLabelStyle()}>Asset Value</span>
+          <h2 style={kpiValueStyle()}>Rs. {metrics.totalStockValuation.toLocaleString()}</h2>
+          <small style={{ color: 'var(--text-muted)', fontSize: '12px' }}>Total asset valuation of current inventory</small>
         </div>
 
-        <div className="premium-card-red" style={{ borderLeft: '4px solid var(--red)' }}>
-          <span style={kpiLabelStyle('var(--red)')}>Accounts Receivable</span>
-          <h2 style={kpiValueStyle('var(--red-dark)')}>Rs. {metrics.totalReceivables.toLocaleString()}</h2>
-          <small style={{ color: 'var(--text-muted)' }}>Total outstanding ledger balance due</small>
+        <div className="premium-card">
+          <span style={kpiLabelStyle()}>Receivables</span>
+          <h2 style={kpiValueStyle()}>Rs. {metrics.totalReceivables.toLocaleString()}</h2>
+          <small style={{ color: 'var(--text-muted)', fontSize: '12px' }}>Total outstanding ledger balance due</small>
         </div>
 
-        <div className="premium-card-red" style={{ borderLeft: '4px solid var(--red)' }}>
-          <span style={kpiLabelStyle('var(--red)')}>Replenishment Alerts</span>
-          <h2 style={kpiValueStyle('var(--red-dark)')}>{metrics.lowStockSKUs} SKUs</h2>
-          <small style={{ color: 'var(--text-muted)' }}>Items currently at or below safety buffer limits</small>
+        <div className="premium-card">
+          <span style={kpiLabelStyle()}>Replenishment Alerts</span>
+          <h2 style={kpiValueStyle(metrics.lowStockSKUs > 0 ? 'var(--red)' : 'var(--text-dark)')}>{metrics.lowStockSKUs} SKUs</h2>
+          <small style={{ color: 'var(--text-muted)', fontSize: '12px' }}>Items at or below safety buffer limits</small>
         </div>
 
-        <div className="premium-card" style={{ borderLeft: '4px solid var(--aqua)' }}>
-          <span style={kpiLabelStyle('var(--aqua-dark)')}>Client Ledger Profiles</span>
-          <h2 style={kpiValueStyle('var(--aqua-dark)')}>{metrics.activeCustomersCount} Active</h2>
-          <small style={{ color: 'var(--text-muted)' }}>Verified business ledger accounts</small>
+        <div className="premium-card">
+          <span style={kpiLabelStyle()}>Active Clients</span>
+          <h2 style={kpiValueStyle()}>{metrics.activeCustomersCount}</h2>
+          <small style={{ color: 'var(--text-muted)', fontSize: '12px' }}>Verified business ledger accounts</small>
         </div>
 
       </div>
@@ -188,22 +188,23 @@ const Dashboard = () => {
 };
 
 // --- STYLING HELPERS EXPRESSIONS ---
-const kpiLabelStyle = (color) => ({
+const kpiLabelStyle = () => ({
   display: 'block',
-  fontSize: '12px',
+  fontSize: '11px',
   fontWeight: '600',
   textTransform: 'uppercase',
-  color: color,
+  color: 'var(--text-muted)',
   marginBottom: '6px',
-  letterSpacing: '0.5px'
+  letterSpacing: '0.05em'
 });
 
-const kpiValueStyle = (color) => ({
+const kpiValueStyle = (color = 'var(--text-dark)') => ({
   margin: '0 0 8px 0',
-  fontSize: '28px',
-  fontWeight: '700',
+  fontSize: '26px',
+  fontWeight: '800',
   color: color,
-  letterSpacing: '-0.5px'
+  fontFamily: 'Plus Jakarta Sans, sans-serif',
+  letterSpacing: '-0.02em'
 });
 
 export default Dashboard;
