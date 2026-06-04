@@ -27,6 +27,11 @@ const ToBill = () => {
   const [newProdQty, setNewProdQty] = useState('');
   const [newProdDisc, setNewProdDisc] = useState(0);
 
+  // New Customer Form State
+  const [newCustName, setNewCustName] = useState('');
+  const [newCustPlace, setNewCustPlace] = useState('');
+  const [newCustBalance, setNewCustBalance] = useState('');
+
   // Fetch initial data from Supabase
   useEffect(() => {
     async function fetchDatabaseData() {
@@ -193,6 +198,53 @@ const ToBill = () => {
       setStatusMessage(`✨ Successfully added "${addedProduct.productName}" to inventory!`);
     } catch (err) {
       setStatusMessage(` Failed to create item: ${err.message}`);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  // --- ADD NEW CUSTOMER TO DATABASE OPERATION ---
+  const handleAddNewCustomer = async (e) => {
+    e.preventDefault();
+    if (!newCustName || !newCustPlace) {
+      alert("Please fill in all required customer fields.");
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      setStatusMessage('Registering new customer...');
+
+      const balanceNum = parseFloat(newCustBalance) || 0;
+      const statusStr = balanceNum === 0 ? 'clear' : 'unpaid';
+
+      const newCustomerPayload = {
+        customer: newCustName,
+        place: newCustPlace,
+        balance: balanceNum,
+        status: statusStr
+      };
+
+      const { data, error } = await supabase
+        .from('Customers')
+        .insert([newCustomerPayload])
+        .select();
+
+      if (error) throw error;
+
+      const addedCustomer = data[0];
+      setCustomers(prev => [...prev, addedCustomer].sort((a, b) => a.customer.localeCompare(b.customer)));
+      
+      // Auto-select the newly added customer
+      setSelectedCustomerId(addedCustomer.customer);
+
+      setNewCustName('');
+      setNewCustPlace('');
+      setNewCustBalance('');
+      
+      setStatusMessage(`✨ Successfully added customer "${addedCustomer.customer}"!`);
+    } catch (err) {
+      setStatusMessage(` Failed to create customer: ${err.message}`);
     } finally {
       setSubmitting(false);
     }
@@ -496,6 +548,52 @@ const ToBill = () => {
                 style={{ width: '100%', justifyContent: 'center', padding: '10px', marginTop: '10px' }}
               >
                 {submitting ? 'Saving...' : 'Save New Product to DB'}
+              </button>
+            </form>
+          </div>
+        </div>
+
+        {/* CARD 4: REGISTER NEW CUSTOMER */}
+        <div className="premium-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          <div>
+            <h3 style={{ margin: '0 0 15px 0', fontSize: '16px', color: 'var(--text-dark)', fontWeight: '700', fontFamily: 'Plus Jakarta Sans' }}>Register New Customer</h3>
+            <form onSubmit={handleAddNewCustomer} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <div>
+                <input 
+                  type="text" 
+                  placeholder="Customer Name" 
+                  value={newCustName}
+                  onChange={(e) => setNewCustName(e.target.value)}
+                  className="premium-input"
+                  required
+                />
+              </div>
+              <div>
+                <input 
+                  type="text" 
+                  placeholder="Region / Place" 
+                  value={newCustPlace}
+                  onChange={(e) => setNewCustPlace(e.target.value)}
+                  className="premium-input"
+                  required
+                />
+              </div>
+              <div>
+                <input 
+                  type="number" 
+                  placeholder="Initial Balance" 
+                  value={newCustBalance}
+                  onChange={(e) => setNewCustBalance(e.target.value)}
+                  className="premium-input"
+                />
+              </div>
+              <button 
+                type="submit" 
+                disabled={submitting} 
+                className="premium-btn-aqua" 
+                style={{ width: '100%', justifyContent: 'center', padding: '10px', marginTop: '10px' }}
+              >
+                {submitting ? 'Saving...' : 'Save New Customer to DB'}
               </button>
             </form>
           </div>
